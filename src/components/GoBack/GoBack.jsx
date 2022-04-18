@@ -5,7 +5,7 @@ const GoBack = () => {
   const location = useLocation();
   return (
     <Button>
-      <Link to={location?.state?.from ?? '/'}>go back</Link>
+      <Link to={location?.state?.from ?? '/'}>GO BACK</Link>
     </Button>
   );
 };

@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.26.1",
     "eslint-plugin-react-hooks": "^4.5.0-next-726ba8029-20220415",
+    "gh-pages": "^3.2.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-loader-spinner": "^6.0.0-0",

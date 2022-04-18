@@ -4,18 +4,18 @@ import { fetchMoviesById } from '../services/MovieAPI';
 import Loader from '../components/Loader/Loader';
 import FilmDetails from '../components/FilmDetails/FilmDetails';
 
-const Film = ({ from }) => {
+const Film = () => {
   const [status, setStatus] = useState('idle');
   const [film, setFilm] = useState(null);
   const [error, setError] = useState(null);
 
-  const { itemId } = useParams();
+  const { movieId } = useParams();
 
   useEffect(() => {
     async function fetchData() {
       try {
         setStatus('pending');
-        const foundFilm = await fetchMoviesById(itemId);
+        const foundFilm = await fetchMoviesById(movieId);
         if (!foundFilm) {
           return await Promise.reject(new Error('movie not found'));
         } else {
@@ -28,7 +28,7 @@ const Film = ({ from }) => {
       }
     }
     fetchData();
-  }, [itemId]);
+  }, [movieId]);
 
   if (status === 'idle') {
     return <p>Try again</p>;

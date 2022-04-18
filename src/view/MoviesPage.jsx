@@ -58,7 +58,7 @@ const MoviesPage = () => {
     return (
       <>
         <SearchForm onSubmit={handleFormSubmit} />
-        <MovieList films={films} from="movie" />
+        <MovieList films={films} from="movies" />
       </>
     );
   }

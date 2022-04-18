@@ -9,13 +9,13 @@ const Cast = () => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
-  const { itemId } = useParams();
+  const { movieId } = useParams();
 
   useEffect(() => {
     async function fetchData() {
       try {
         setStatus('pending');
-        const data = await fetchMoviesActors(itemId);
+        const data = await fetchMoviesActors(movieId);
         if (!data) {
           return await Promise.reject(new Error('Try another name'));
         } else {
@@ -28,7 +28,7 @@ const Cast = () => {
       }
     }
     fetchData();
-  }, [itemId]);
+  }, [movieId]);
 
   if (status === 'idle') {
     return <p>idle</p>;

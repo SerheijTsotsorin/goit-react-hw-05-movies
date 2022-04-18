@@ -9,13 +9,13 @@ const Reviews = () => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
-  const { itemId } = useParams();
+  const { movieId } = useParams();
 
   useEffect(() => {
     async function fetchData() {
       try {
         setStatus('pending');
-        const data = await fetchMoviesReviews(itemId);
+        const data = await fetchMoviesReviews(movieId);
         if (!data) {
           return await Promise.reject(new Error('Try another name'));
         } else {
@@ -28,7 +28,7 @@ const Reviews = () => {
       }
     }
     fetchData();
-  }, [itemId]);
+  }, [movieId]);
 
   if (status === 'idle') {
     return <p>idle</p>;
