@@ -1,41 +1,39 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input, Button } from './SearchForm.styled';
+import { Form, Button } from './SearchForm.styled';
 
-export default function SearchForm({ onSearchSubmit }) {
-  const [searchFilm, setSearchFilm] = useState('');
+const SearchForm = ({ onSubmit }) => {
+  const [searchName, setSearchName] = useState('');
 
-  const handleFilmChange = e => {
-    setSearchFilm(e.target.value.toLowerCase());
+  const handleChange = evt => {
+    setSearchName(evt.target.value.toLowerCase());
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    if (!searchFilm.trim()) {
-      alert('Поисковая строка пуста');
+  const handleSubmit = evt => {
+    evt.preventDefault();
+    if (searchName.trim() === '') {
       return;
     }
-
-    onSearchSubmit(searchFilm);
-    setSearchFilm('');
+    onSubmit(searchName);
+    setSearchName('');
   };
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Input
+      <input
+        onChange={handleChange}
+        value={searchName}
         type="text"
         autoComplete="off"
         autoFocus
-        placeholder="Search film"
-        value={searchFilm}
-        onChange={handleFilmChange}
       />
       <Button type="submit">Search</Button>
     </Form>
   );
-}
+};
 
-SearchForm.propType = {
-  onSearchSubmit: PropTypes.func.isRequired,
+export default SearchForm;
+
+SearchForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };

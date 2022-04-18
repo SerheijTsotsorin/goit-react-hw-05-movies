@@ -6,35 +6,57 @@
 import axios from 'axios';
 
 const API_KEY = 'e17c0253c8740e62872e4c433f2396d4';
-axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
+axios.defaults.baseURL = 'https://api.themoviedb.org/3';
 
-async function fetchData(URL) {
+export async function fetchTrendingMovies() {
   try {
-    const response = await axios.get(URL);
+    const response = await axios.get(`/trending/movie/week?api_key=${API_KEY}`);
     return response.data.results;
   } catch (error) {
     console.log(error);
   }
 }
 
-export function fetchTrendingMovies() {
-  return fetchData(`/trending/movie/week?api_key=${API_KEY}`);
+export async function fetchMoviesByName(name) {
+  try {
+    const response = await axios.get(
+      `/search/movie?api_key=${API_KEY}&query=${name}`
+    );
+    return response.data.results;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-export function fetchMoviesByName(name) {
-  return fetchData(`/search/movie?api_key=${API_KEY}&query=${name}`);
+export async function fetchMoviesById(id) {
+  try {
+    const response = await axios.get(
+      `/movie/${id}?api_key=${API_KEY}&language=en-US`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-export function fetchMoviesById(id) {
-  return fetchData(`/movie/${id}?api_key=${API_KEY}&language=en-US`);
+export async function fetchMoviesActors(id) {
+  try {
+    const response = await axios.get(
+      `/movie/${id}/credits?api_key=${API_KEY}&language=en-US`
+    );
+    return response.data.cast;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-export function fetchMoviesActors(id) {
-  return fetchData(`/movie/${id}/credits?api_key=${API_KEY}&language=en-US`);
-}
-
-export function fetchMoviesReviews(id) {
-  return fetchData(
-    `/movie/${id}/reviews?api_key=${API_KEY}&language=en-US&page=1`
-  );
+export async function fetchMoviesReviews(id) {
+  try {
+    const response = await axios.get(
+      `/movie/${id}/reviews?api_key=${API_KEY}&language=en-US&page=1`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
 }

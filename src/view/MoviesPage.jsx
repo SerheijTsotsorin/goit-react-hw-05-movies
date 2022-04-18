@@ -1,49 +1,64 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { fetchMoviesByName } from '../services/MovieAPI';
+import SearchForm from '../components/SearchForm/SearchForm';
+import MovieList from '../components/MovieList/MovieList';
+import Loader from '../components/Loader/Loader';
 
-import SearchForm from 'components/SearchForm/SearchForm';
-import SearchMovies from 'components/SearchMovies/SearchMovies';
-import { fetchMoviesByName } from 'services/MovieAPI';
-// import { useParams } from 'react-router-dom';
-
-export function MoviesPage() {
-  const [nameFilm, setNameFilm] = useState('');
-  const [listFilm, setListFilm] = useState([]);
+const MoviesPage = () => {
+  const [name, setName] = useState(null);
   const [status, setStatus] = useState('idle');
+  const [films, setFilms] = useState([]);
   const [error, setError] = useState(null);
 
-  //   let { movieID } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  let currentQuery = searchParams.get('query');
 
-  const handleSearchSubmit = nameFilm => {
-    setNameFilm(nameFilm);
-    console.log(nameFilm);
+  const handleFormSubmit = name => {
+    setName(name);
   };
 
   useEffect(() => {
-    if (!nameFilm) {
-      return;
+    if (name) {
+      setSearchParams({ query: name });
     }
-    async function fetchListSearchMovies({ nameFilm }) {
+    async function fetchData() {
       try {
         setStatus('pending');
-        const Movies = await fetchMoviesByName();
-        setListFilm(Movies);
+        const films = await fetchMoviesByName(currentQuery);
+
+        if (films.length === 0) {
+          return await Promise.reject(new Error('Try another name'));
+        } else {
+          setFilms(films);
+        }
         setStatus('resolved');
       } catch (error) {
         setStatus('rejected');
-        setError(error);
+        setError(error.message);
       }
     }
-    fetchListSearchMovies();
-  });
+    if (currentQuery) {
+      fetchData();
+    }
+  }, [name, setSearchParams, currentQuery]);
 
   if (status === 'idle') {
-    return <SearchForm onSearchSubmit={handleSearchSubmit} />;
+    return <SearchForm onSubmit={handleFormSubmit} />;
   }
   if (status === 'pending') {
     return (
       <>
-        <SearchForm onSearchSubmit={handleSearchSubmit} />
-        <h2>Wait....</h2>
+        <SearchForm onSubmit={handleFormSubmit} />
+        <Loader />
+      </>
+    );
+  }
+  if (status === 'resolved') {
+    return (
+      <>
+        <SearchForm onSubmit={handleFormSubmit} />
+        <MovieList films={films} from="movie" />
       </>
     );
   }
@@ -51,17 +66,11 @@ export function MoviesPage() {
   if (status === 'rejected') {
     return (
       <>
-        <SearchForm onSearchSubmit={handleSearchSubmit} />
-        <h2>{error.messaage}</h2>
+        <SearchForm onSubmit={handleFormSubmit} />
+        <h2>{error}</h2>
       </>
     );
   }
-  if (status === 'resolved') {
-    return (
-      <>
-        <SearchForm onSearchSubmit={handleSearchSubmit} />
-        <SearchMovies films={listFilm} />
-      </>
-    );
-  }
-}
+};
+
+export default MoviesPage;

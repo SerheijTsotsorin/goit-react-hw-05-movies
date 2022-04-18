@@ -1,47 +1,41 @@
 import { useState, useEffect } from 'react';
+import { fetchTrendingMovies } from '../services/MovieAPI';
+import Loader from '../components/Loader/Loader';
 
-import { fetchTrendingMovies } from 'services/MovieAPI';
-// import ListMoviesTrending from 'components/ListMoviesTrending';
-import TrendingMovies from 'components/TrendingMovies/TrendingMovies';
+import MovieList from '../components/MovieList/MovieList';
 
-const useFetchItem = () => {
-  const [trendFilm, setTrendFilm] = useState([]);
+const HomePage = () => {
+  const [trendingFilms, setTrendingFilms] = useState([]);
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchTrendMovies() {
+    async function fetchFilms() {
       try {
         setStatus('pending');
-        const Movies = await fetchTrendingMovies();
-        setTrendFilm(Movies);
+        const films = await fetchTrendingMovies();
+        setTrendingFilms(films);
         setStatus('resolved');
       } catch (error) {
         setStatus('rejected');
-        setError(error);
+        setError(error.message);
       }
     }
-    fetchTrendMovies();
+    fetchFilms();
   }, []);
 
-  return { trendFilm, status, error };
-};
-
-export function HomePage() {
-  const { trendFilm, status, error } = useFetchItem();
-
   if (status === 'idle') {
-    return <></>;
+    return <p>Try later</p>;
   }
   if (status === 'pending') {
-    return <h2>Wait.....</h2>;
+    return <Loader />;
+  }
+  if (status === 'resolved') {
+    return <MovieList films={trendingFilms} from="home" />;
   }
 
   if (status === 'rejected') {
-    return <h2>{error.message}</h2>;
+    return <h2>{error}</h2>;
   }
-
-  if (status === 'resolved') {
-    return <TrendingMovies films={trendFilm} />;
-  }
-}
+};
+export default HomePage;

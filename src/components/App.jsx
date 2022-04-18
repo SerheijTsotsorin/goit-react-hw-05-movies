@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import { Layout } from 'components/Layout/Layout';
 import { Navigation } from './Navigation/Navigation';
-import { HomePage } from '../view/HomePage';
-import { MoviesPage } from '../view/MoviesPage';
+import HomePage from '../view/HomePage';
+import MoviesPage from '../view/MoviesPage';
 import MovieDetailsPage from '../view/MovieDetailsPage';
 import Cast from '../view/Cast';
 import Reviews from '../view/Reviews';
