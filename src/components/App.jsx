@@ -57,50 +57,17 @@ const Reviews = lazy(() =>
 
 export const App = () => (
   <>
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route
-          index
-          element={
-            <Suspense fallback={<Loader />}>
-              <HomePage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="movies"
-          element={
-            <Suspense fallback={<Loader />}>
-              <MoviesPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="movies/:movieId"
-          element={
-            <Suspense fallback={<Loader />}>
-              <MovieDetailsPage />
-            </Suspense>
-          }
-        >
-          <Route
-            path="cast"
-            element={
-              <Suspense fallback={<Loader />}>
-                <Cast />
-              </Suspense>
-            }
-          />
-          <Route
-            path="reviews"
-            element={
-              <Suspense fallback={<Loader />}>
-                <Reviews />
-              </Suspense>
-            }
-          />
+    <Suspense fallback={<Loader />}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="movies" element={<MoviesPage />} />
+          <Route path="movies/:movieId" element={<MovieDetailsPage />}>
+            <Route path="cast" element={<Cast />} />
+            <Route path="reviews" element={<Reviews />} />
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </Suspense>
   </>
 );
